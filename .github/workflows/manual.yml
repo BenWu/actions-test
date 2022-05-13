@@ -26,6 +26,7 @@ jobs:
         name: Check for existing PRs
         run: | 
           prs_json=$(gh pr list --state open --base main --head dev --json url)
+          echo $prs_json
           echo "::set-output name=prs::'$prs_json'"
 
   create-pr:
