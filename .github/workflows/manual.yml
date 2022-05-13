@@ -1,7 +1,6 @@
 name: Create release PR
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+# Run on pushes to dev branch or manual trigger
 on:
   push:
     branches:
@@ -20,6 +19,7 @@ jobs:
       prs: ${{ steps.check.outputs.prs }}
 
     steps:
+      # Output JSON to output called prs
       - id: check
         name: Check for existing PRs
         run: echo "::set-output name=prs::$(gh pr list --state open --base main --head dev --json url)"
@@ -45,3 +45,15 @@ jobs:
 
       - name: Create Pull Request
         run: gh pr create --base main --head dev --title "Merge dev into main - $(date +%F)" --body hi --label release
+
+  pr-exists:
+    runs-on: ubuntu-latest
+
+    needs: check-for-existing-pr
+
+    # Only run if no existing release PRs exist
+    if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] != null }}
+
+    steps:
+      - name: Release PR already exists
+        run: echo "Release PR already exists; skipping PR creation"
