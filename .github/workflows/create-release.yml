@@ -6,16 +6,20 @@ on:
     branches:
       - 'dev'
   workflow_dispatch:
- 
-permissions:
-  pull-requests: write
-  contents: read
+
+# Use default github actions token for gh CLI
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   check-for-existing-pr:
     name: Check for existing PR
 
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: read
+      contents: read
 
     outputs:
       prs: ${{ steps.check.outputs.prs }}
@@ -31,22 +35,21 @@ jobs:
           prs_json=$(gh pr list --state open --base main --head dev --json url)
           echo $prs_json
           echo "::set-output name=prs::$prs_json"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   create-pr:
     name: Create release PR
 
     runs-on: ubuntu-latest
 
+    permissions:
+      pull-requests: write
+      repository-projects: read
+      contents: read
+
     needs: check-for-existing-pr
 
     # Only run if no existing release PRs exist
     if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] == null }}
-
-    # Use default github actions token for gh CLI
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
@@ -73,4 +76,4 @@ jobs:
 
     steps:
       - name: Release PR already exists
-        run: echo ${{ needs.check-for-existing-pr.outputs.prs }}
+        run: echo ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0].url }}
