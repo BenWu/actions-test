@@ -24,7 +24,9 @@ jobs:
       # Output JSON to output called prs
       - id: check
         name: Check for existing PRs
-        run: echo "::set-output name=prs::$(gh pr list --state open --base main --head dev --json url)"
+        run: | 
+          prs_json=$(gh pr list --state open --base main --head dev --json url)
+          echo "::set-output name=prs::'$prs_json'"
 
   create-pr:
     name: Create release PR
