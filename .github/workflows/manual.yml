@@ -50,6 +50,12 @@ jobs:
       - name: Create Pull Request
         run: gh pr create --base main --head dev --title "Merge dev into main - $(date +%F)" --body hi --label release
 
+      # Adding labels in one step using the CLI doesn't work via actions
+      - name: Add release label
+        run: |
+          pr_num=$(gh pr list --state open --base main --head dev --json number | jq '.[0].number')
+          gh pr edit $pr_num --add-label release
+
   pr-exists:
     name: Release PR already exists
 
