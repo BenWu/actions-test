@@ -28,6 +28,8 @@ jobs:
           prs_json=$(gh pr list --state open --base main --head dev --json url)
           echo $prs_json
           echo "::set-output name=prs::'$prs_json'"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   create-pr:
     name: Create release PR
