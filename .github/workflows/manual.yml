@@ -1,6 +1,4 @@
-# This is a basic workflow that is manually triggered
-
-name: Manual workflow
+name: Create release PR
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -10,24 +8,40 @@ on:
       - 'dev'
   workflow_dispatch:
  
+permissions:
+  pull-requests: write
+  contents: read
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  create-pr:
-    # The type of runner that the job will run on
+  check-for-existing-pr:
     runs-on: ubuntu-latest
 
-    permissions:
-      pull-requests: write
-      contents: read
+    outputs:
+      prs: ${{ steps.check.outputs.prs }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - id: check
+        name: Check for existing PRs
+        run: echo "::set-output name=prs::$(gh pr list --state open --base main --head dev --json url)"
+
+  create-pr:
+    runs-on: ubuntu-latest
+
+    needs: check-for-existing-pr
+
+    # Only run if no existing release PRs exist
+    if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] == null }}
+
+    # Use default github actions token for gh CLI
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Check for existing PRs
+        run: gh pr list --state open --base main --head dev --json url
+
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Create Pull Request
         run: gh pr create --base main --head dev --title "Merge dev into main - $(date +%F)" --body hi --label release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
