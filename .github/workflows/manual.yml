@@ -42,16 +42,13 @@ jobs:
     needs: check-for-existing-pr
 
     # Only run if no existing release PRs exist
-    if: needs.check-for-existing-pr.outputs.prs == '[]'
+    if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] == null }}
 
     # Use default github actions token for gh CLI
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Check for existing PRs
-        run: gh pr list --state open --base main --head dev --json url
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -72,7 +69,7 @@ jobs:
     needs: check-for-existing-pr
 
     # Only run if no existing release PRs exist
-    if: needs.check-for-existing-pr.outputs.prs != '[]'
+    if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] != null }}
 
     steps:
       - name: Release PR already exists
