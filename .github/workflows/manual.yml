@@ -13,6 +13,8 @@ permissions:
 
 jobs:
   check-for-existing-pr:
+    name: Check for existing PR
+
     runs-on: ubuntu-latest
 
     outputs:
@@ -25,6 +27,8 @@ jobs:
         run: echo "::set-output name=prs::$(gh pr list --state open --base main --head dev --json url)"
 
   create-pr:
+    name: Create release PR
+
     runs-on: ubuntu-latest
 
     needs: check-for-existing-pr
@@ -47,6 +51,8 @@ jobs:
         run: gh pr create --base main --head dev --title "Merge dev into main - $(date +%F)" --body hi --label release
 
   pr-exists:
+    name: Release PR already exists
+
     runs-on: ubuntu-latest
 
     needs: check-for-existing-pr
