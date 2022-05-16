@@ -57,7 +57,8 @@ jobs:
           
           git fetch
           # Use || to prevent script from exiting on non-zero exit code
-          git diff remotes/origin/${{ inputs.base_branch }}..remotes/origin/${{ inputs.head_branch }} --exit-code || diff_code=$?
+          git diff remotes/origin/${{ inputs.base_branch }}..remotes/origin/${{ inputs.head_branch }} --exit-code
+          diff_code=$?
           echo "git diff code: $diff_code"
           if [[ "$diff_code" != '1' ]] && [[ "$diff_code" != '0' ]]; then exit $diff_code; fi
           echo "::set-output name=files_changed::$diff_code"
