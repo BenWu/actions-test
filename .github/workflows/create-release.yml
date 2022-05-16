@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 'dev'
+      - 'main'
   workflow_dispatch:
 
 # Use default github actions token for gh CLI
@@ -43,8 +44,8 @@ jobs:
 
     permissions:
       pull-requests: write
-      repository-projects: read
       contents: read
+      repository-projects: read  # Needed to add labels
 
     needs: check-for-existing-pr
 
