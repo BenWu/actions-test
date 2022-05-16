@@ -10,6 +10,12 @@ on:
       head_branch:
         required: true
         type: string
+      title:
+        required: true
+        type: string
+      body:
+        required: true
+        type: string
     secrets:
       gh_token:
         required: true
@@ -72,7 +78,9 @@ jobs:
           gh pr create \
             --base ${{ inputs.base_branch }} \
             --head ${{ inputs.head_branch }} \
-            --title "Merge dev into main - $(date +%F)" --body hi --label release
+            --title "${{ inputs.title }}" \
+            --body "${{ inputs.body }}" \
+            --label release
 
       # Adding labels in one step using the CLI doesn't work via actions
       - name: Add release label
