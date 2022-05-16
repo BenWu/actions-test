@@ -11,12 +11,12 @@ on:
         required: true
         type: string
     secrets:
-      github_token:
+      gh_token:
         required: true
 
 # Use default github actions token for gh CLI
 env:
-  GITHUB_TOKEN: ${{ on.workflow_call.secrets.github_token }}
+  GITHUB_TOKEN: ${{ secrets.gh_token }}
 
 jobs:
   check-for-existing-pr:
@@ -39,9 +39,11 @@ jobs:
       - id: check
         name: Check for existing PRs
         run: | 
+          echo ${{ inputs.base_branch }}
+          echo ${{ inputs.head_branch }}
           prs_json=$(gh pr list --state open \
-            --base ${{ on.workflow_call.input.base_branch }} \ 
-            --head ${{ on.workflow_call.input.head_branch }} \
+            --base ${{ inputs.base_branch }} \
+            --head ${{ inputs.head_branch }} \
             --json url)
           echo $prs_json
           echo "::set-output name=prs::$prs_json"
@@ -67,17 +69,17 @@ jobs:
 
       - name: Create Pull Request
         run: |
-        gh pr create \
-          --base ${{ on.workflow_call.input.base_branch }} \
-          --head ${{ on.workflow_call.input.head_branch }} \
-          --title "Merge dev into main - $(date +%F)" --body hi --label release
+          gh pr create \
+            --base ${{ inputs.base_branch }} \
+            --head ${{ inputs.head_branch }} \
+            --title "Merge dev into main - $(date +%F)" --body hi --label release
 
       # Adding labels in one step using the CLI doesn't work via actions
       - name: Add release label
         run: |
           pr_num=$(gh pr list --state open \
-            --base ${{ on.workflow_call.input.base_branch }} \
-            --head ${{ on.workflow_call.input.head_branch }} \
+            --base ${{ inputs.base_branch }} \
+            --head ${{ inputs.head_branch }} \
             --json number | jq '.[0].number')
           gh pr edit $pr_num --add-label release
 

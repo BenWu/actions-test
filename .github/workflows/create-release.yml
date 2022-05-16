@@ -9,9 +9,14 @@ on:
 
 jobs:
   create-release-pr:
+    permissions:
+      pull-requests: write
+      contents: read
+      repository-projects: read  # Needed to add labels
+
     uses: ./.github/workflows/auto-create-pr.yml
     with:
       base_branch: main
       head_branch: dev
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      gh_token: ${{ secrets.GITHUB_TOKEN }}
