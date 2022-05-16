@@ -56,7 +56,6 @@ jobs:
           echo "::set-output name=prs::$prs_json"
           
           git fetch
-          git branch -a
           # Use || to prevent script from exiting on non-zero exit code
           git diff remotes/origin/${{ inputs.base_branch }}..remotes/origin/${{ inputs.head_branch }} --exit-code || diff_code=$?
           if [[ "$diff_code" != '1' ]] && [[ "$diff_code" != '0' ]]; then exit $diff_code; fi
