@@ -9,6 +9,8 @@ on:
 
 jobs:
   create-backmerge-pr:
+    name: Create backmerge pull request
+
     permissions:
       pull-requests: write
       contents: read

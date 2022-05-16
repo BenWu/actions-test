@@ -9,6 +9,8 @@ on:
 
 jobs:
   create-release-pr:
+    name: Create release pull request
+
     permissions:
       pull-requests: write
       contents: read
