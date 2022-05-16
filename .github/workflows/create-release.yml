@@ -9,7 +9,7 @@ on:
 
 jobs:
   create-release-pr:
-    uses: ./.github/workflows/auto-create-pr
+    uses: ./.github/workflows/auto-create-pr.yml
     with:
       base_branch: main
       head_branch: dev

@@ -67,10 +67,10 @@ jobs:
 
       - name: Create Pull Request
         run: |
-        gh pr create \
-          --base ${{ on.workflow_call.input.base_branch }} \
-          --head ${{ on.workflow_call.input.head_branch }} \
-          --title "Merge dev into main - $(date +%F)" --body hi --label release
+          gh pr create \
+            --base ${{ on.workflow_call.input.base_branch }} \
+            --head ${{ on.workflow_call.input.head_branch }} \
+            --title "Merge dev into main - $(date +%F)" --body hi --label release
 
       # Adding labels in one step using the CLI doesn't work via actions
       - name: Add release label
