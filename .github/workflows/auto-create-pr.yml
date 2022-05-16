@@ -76,7 +76,7 @@ jobs:
 
     needs: check-for-existing-pr
 
-    # Only run if no existing release PRs exist and there is a difference between the branches (no run for merge commits)
+    # Only run if no existing release PRs exist and there is a difference between the branches (don't run for merge commits)
     if: ${{ fromJSON(needs.check-for-existing-pr.outputs.prs)[0] == null && needs.check-for-existing-pr.outputs.files_changed == '1' }}
 
     steps:
