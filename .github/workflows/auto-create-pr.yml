@@ -11,12 +11,12 @@ on:
         required: true
         type: string
     secrets:
-      github_token:
+      gh_token:
         required: true
 
 # Use default github actions token for gh CLI
 env:
-  GITHUB_TOKEN: ${{ on.workflow_call.secrets.github_token }}
+  GITHUB_TOKEN: ${{ on.workflow_call.secrets.gh_token }}
 
 jobs:
   check-for-existing-pr:

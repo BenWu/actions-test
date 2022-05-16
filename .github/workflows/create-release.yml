@@ -14,4 +14,4 @@ jobs:
       base_branch: main
       head_branch: dev
     secrets:
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      gh_token: ${{ secrets.GITHUB_TOKEN }}
