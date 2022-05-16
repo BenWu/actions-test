@@ -39,6 +39,8 @@ jobs:
       - id: check
         name: Check for existing PRs
         run: | 
+          echo ${{ inputs.base_branch }}
+          echo ${{ inputs.head_branch }}
           prs_json=$(gh pr list --state open \
             --base ${{ inputs.base_branch }} \ 
             --head ${{ inputs.head_branch }} \
