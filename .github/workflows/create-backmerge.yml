@@ -1,14 +1,14 @@
-name: Create release PR
+name: Create backmerge PR
 
 # Run on pushes to dev branch or manual trigger
 on:
   push:
     branches:
-      - 'dev'  # Create a PR as soon as there is at least one commit
+      - 'main'  # Create a PR as soon as there is at least one commit
   workflow_dispatch:
 
 jobs:
-  create-release-pr:
+  create-backmerge-pr:
     permissions:
       pull-requests: write
       contents: read
@@ -17,9 +17,9 @@ jobs:
     uses: ./.github/workflows/auto-create-pr.yml
 
     with:
-      base_branch: main
-      head_branch: dev
-      title: Advance main release to dev - $(date +%F)
+      base_branch: dev
+      head_branch: main
+      title: Backmerge main into dev - $(date +%F)
       body: hi
 
     secrets:
