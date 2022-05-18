@@ -22,7 +22,13 @@ jobs:
       base_branch: main
       head_branch: dev
       title: Advance main release to dev - $(date +%F)
-      body: hi
+      body: |
+        # hi
+        Test
+        line
+        \`dfls\`
+        **afsadf**
+        ~~ooooooo~~
 
     secrets:
       gh_token: ${{ secrets.GITHUB_TOKEN }}
